@@ -5,10 +5,11 @@ body, html {
 }
 
 body {
-    padding-top: 5rem;
+    
     flex-direction: column;
     font-family: 'quicksand';
-    overflow-y: hidden;
+    /*overflow-y: hidden;
+    padding-top: 5rem;*/
 }
 
 form {

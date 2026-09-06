@@ -1,0 +1,74 @@
+@page "/pizzas"
+
+@using Microsoft.AspNetCore.WebUtilities
+
+@inject NavigationManager NavManager
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<h1>Choose your pizza</h1>
+
+<p>We have all these delicious recipes:</p>
+
+<h1>Buy a Pizza</h1>
+
+<p>I want to order a: @PizzaName</p>
+
+<p>I want to add this topping: @ToppingName</p>
+
+<a href=@HomePageURI>Home Page</a>
+
+
+@if (todaysPizzas == null)
+{
+    <p>We're finding out what pizzas are available today...</p>
+}
+else
+{
+    <table>
+     <thead>
+      <tr>
+       <th>Pizza Name</th>
+       <th>Description</th>
+       <th>Price</th>
+      </tr>
+     </thead>
+     <tbody>
+      @foreach (var pizza in todaysPizzas)
+      {
+       <tr>
+        <td>@pizza.Name</td>
+        <td>@pizza.Description</td>
+        <td>@pizza.GetFormattedBasePrice()</td>
+       </tr>
+      }
+     </tbody>
+    </table>
+}
+
+@code {
+    private List<PizzaSpecial> todaysPizzas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        todaysPizzas = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>(NavigationManager.BaseUri + "specials");
+    }
+
+
+     [Parameter]
+    public string PizzaName { get; set; }
+    
+    private string ToppingName { get; set; }
+    
+    public string HomePageURI { get; set; }
+    
+    protected override void OnInitialized()
+    {
+        HomePageURI = NavManager.BaseUri;
+         var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("extratopping", out var extraTopping))
+        {
+            ToppingName = System.Convert.ToString(extraTopping);
+        }
+    }
+}

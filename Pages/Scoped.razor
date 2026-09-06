@@ -1,0 +1,10 @@
+@page "/scoped"
+@inject PizzaSalesState SalesState
+<button @onclick="IncrementSales">Comprar una pizza</button>
+<p>Hoy hemos vendido: @SalesState.PizzasSoldToday pizzas</p>
+@code {
+    private void IncrementSales()
+    {
+        SalesState.PizzasSoldToday++;
+    }
+}

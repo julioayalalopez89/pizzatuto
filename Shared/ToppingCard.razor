@@ -1,0 +1,7 @@
+<h2>@Topping.Name</h2>
+<p>Price: @Topping.GetFormattedPrice()</p>
+
+@code {
+    [Parameter]
+    public Topping Topping { get; set; }
+}
